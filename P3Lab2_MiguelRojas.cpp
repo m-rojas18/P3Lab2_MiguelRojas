@@ -9,7 +9,7 @@ void imprimirMatriz(double**,int);
 double calcularMu(double** , int );
 double calcularSigma(double** , int , double);
 void calcularSumatoria(double, double, double);
-void sacarRaices(double, double, double, double, double, int);
+void sacarRaices(double, double, double, double, double, int, int);
 
 int main(){
 
@@ -48,7 +48,8 @@ int main(){
                 double vertice_x = (-coeficiente_b )/ (2 * coeficiente_a);
                 double x0_intento1 = vertice_x - 200;
                 double x0_intento2 = vertice_x + 200;
-                sacarRaices(coeficiente_a, coeficiente_b, coeficiente_c, x0_intento1, 0, 0);
+                cout << "No logre terminar el ejercicio :(" << endl;
+               // sacarRaices(coeficiente_a, coeficiente_b, coeficiente_c, x0_intento1,0, 0, 0);
 
 
                 break;
@@ -169,25 +170,24 @@ void calcularSumatoria(double limit_sumatoria, double contador, double sumatoria
     }
 }
 
-void sacarRaices(double a, double b, double c, double x0, double sumatoria, int indicador){
+void sacarRaices(double a, double b, double c, double x_n, double sumatoria, int indicador, int contador){
     string salida = "";
     if(indicador == 0){
         salida = "Raiz uno: ";
     } else {
         salida = "Raiz dos: ";
     }
-    double f_x0, f_prima_x0;
-    if(x0 == 100){
+    double f_xn, f_prima_xn;
+    if(contador > 0){
         cout << "Valor Final = " << sumatoria ;
-        cout << salida;
+        //cout << salida;
     } else {
         //Sacar f(x)
-        f_x0 = pow(a * x0,2) + b * x0 + c;
+        f_xn= pow(a * x_n,2) + b * x_n + c;
         //Sacar f'(x)
-        f_prima_x0 = 2 * a * x0 + b;
-        sumatoria += x0 - f_x0/f_prima_x0;
-        cout << "Suma = " << sumatoria << endl;
-        sacarRaices(a, b, c, x0 ++, sumatoria, indicador);
+        f_prima_xn = 2 * a * x_n + b;
+        sumatoria += x_n- (f_xn/f_prima_xn); 
+        sacarRaices(a, b, c, sumatoria, sumatoria, indicador, ++ contador);
     }
 
 
