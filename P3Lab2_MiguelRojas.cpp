@@ -6,9 +6,10 @@
 using namespace std;
 
 void imprimirMatriz(double**,int);
-double calcularMu(double** matriz, int tamano);
-double calcularSigma(double** matriz, int tamano, double valor_mu);
-void calcularSumatoria(double limit_sumatoria, double contador, double sumatoria);
+double calcularMu(double** , int );
+double calcularSigma(double** , int , double);
+void calcularSumatoria(double, double, double);
+void sacarRaices(double, double, double, double, double, int);
 
 int main(){
 
@@ -16,7 +17,7 @@ int main(){
     int resp;
     while (seguir == 's'){
         cout << "** Menu **" << endl
-            << "[1]" << endl
+            << "[1] Metodo Newton-Raphson " << endl
             << "[2] Matriz Estandarizada" << endl
             << "[3] Aproximacion de PI" << endl
             << "Salir" << endl
@@ -25,6 +26,30 @@ int main(){
         cout << endl;
         switch (resp){
             case 1: {
+                //Ejercicio 1 - Metodo Newton-Raphson 
+                //Pedir valores
+                double coeficiente_a, coeficiente_b, coeficiente_c;
+                cout << "Ingresara un polinomio e la forma ax^2 + bx + c." << endl;
+                cout << "Ingrese a: ";
+                cin >> coeficiente_a;
+                cout << endl;
+                //Validar a
+                while(coeficiente_a == 0){
+                    cout << "El valor de a no puede ser 0\nIngrese otro valor para a: ";
+                    cin >> coeficiente_a;
+                    cout << endl;
+                }
+                cout << "Ingrese b: ";
+                cin >> coeficiente_b;
+                cout << endl;
+                cout << "Ingrese c: ";
+                cin >> coeficiente_c;
+                cout << endl;
+                double vertice_x = (-coeficiente_b )/ (2 * coeficiente_a);
+                double x0_intento1 = vertice_x - 200;
+                double x0_intento2 = vertice_x + 200;
+                sacarRaices(coeficiente_a, coeficiente_b, coeficiente_c, x0_intento1, 0, 0);
+
 
                 break;
             }
@@ -45,7 +70,7 @@ int main(){
                     }     
                 } 
                 cout << "Matriz Original" << endl;
-                imprimirMatriz(matriz_creada, 5);
+                imprimirMatriz(matriz_creada, size);
                 cout << endl;
                 //Conseguir Valores de matriz estandarizada
                 double valor_mu = calcularMu(matriz_creada, size);
@@ -63,6 +88,12 @@ int main(){
                 cout << "Matriz Estandarizada" << endl;
                 imprimirMatriz(matriz_creada, size);
                 cout << endl;
+                // Libera la matriz
+	            for(int i = 0; i < size; i++){
+		            delete[] matriz_creada[i];
+		        matriz_creada[i] = NULL;
+	            }
+	            delete[] matriz_creada;
                 break;
             }
             case 3:{
@@ -84,6 +115,7 @@ int main(){
         }
     }
 }
+//Metodos
 
 void imprimirMatriz(double** matriz, int tamano){
     for (int i = 0; i < tamano; i++){
@@ -135,6 +167,28 @@ void calcularSumatoria(double limit_sumatoria, double contador, double sumatoria
         sumatoria += pow(-1,contador) / ( 2 * contador + 1);
         calcularSumatoria(limit_sumatoria, ++ contador, sumatoria);
     }
+}
 
-    
+void sacarRaices(double a, double b, double c, double x0, double sumatoria, int indicador){
+    string salida = "";
+    if(indicador == 0){
+        salida = "Raiz uno: ";
+    } else {
+        salida = "Raiz dos: ";
+    }
+    double f_x0, f_prima_x0;
+    if(x0 == 100){
+        cout << "Valor Final = " << sumatoria ;
+        cout << salida;
+    } else {
+        //Sacar f(x)
+        f_x0 = pow(a * x0,2) + b * x0 + c;
+        //Sacar f'(x)
+        f_prima_x0 = 2 * a * x0 + b;
+        sumatoria += x0 - f_x0/f_prima_x0;
+        cout << "Suma = " << sumatoria << endl;
+        sacarRaices(a, b, c, x0 ++, sumatoria, indicador);
+    }
+
+
 }
